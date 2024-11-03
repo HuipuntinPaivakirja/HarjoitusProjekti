@@ -1,18 +1,18 @@
 import React, { useState, useRef } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import { useCameraPermissions } from 'expo-camera'; //Updated from legacy to new version, useCameraPermissions is now a hook
+import { useCameraPermissions } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import ImagePreview from '../components/ImagePreview';
 import Camera from '../components/Camera';
 
 export default function CameraScreen() {
-  const [permission, requestPermission] = useCameraPermissions(); // New hook from expo-camera
-  const [image, setImage] = useState(null);
+  const [permission, requestPermission] = useCameraPermissions(); // New hook from expo-camera. It returns the permission status and a function to request the permission
+  const [image, setImage] = useState(null); // Image uri
   const [cameraType, setCameraType] = useState('back'); // Camera type (front or back)
   const [flashMode, setFlashMode] = useState('off'); // Flash mode (on or off)
-  const cameraRef = useRef(null);
+  const cameraRef = useRef(null); // Camera reference
 
-  // Handle permissions not granted
+  // Handle permissions not loaded yet
   if (!permission) {
     // Camera permissions are still loading
     return (
@@ -22,6 +22,7 @@ export default function CameraScreen() {
     );
   }
 
+  // Handle permissions not granted
   if (!permission.granted) {
     // Camera permissions are not granted yet
     return (
@@ -94,7 +95,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   message: {
-    fontSize: 16,
     marginBottom: 20,
   },
 });
