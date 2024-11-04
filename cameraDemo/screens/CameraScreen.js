@@ -1,17 +1,18 @@
 import React, { useState, useRef } from 'react';
-import { StyleSheet, Text, View, ImageBackground } from 'react-native';
-import { CameraView, useCameraPermissions } from 'expo-camera'; //Updated from legacy to new version, useCameraPermissions is now a hook
+import { StyleSheet, Text, View, Button } from 'react-native';
+import { useCameraPermissions } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
-import Button from '../components/Button';
+import ImagePreview from '../components/ImagePreview';
+import Camera from '../components/Camera';
 
 export default function CameraScreen() {
-  const [permission, requestPermission] = useCameraPermissions(); // New hook from expo-camera
-  const [image, setImage] = useState(null);
+  const [permission, requestPermission] = useCameraPermissions(); // New hook from expo-camera. It returns the permission status and a function to request the permission
+  const [image, setImage] = useState(null); // Image uri
   const [cameraType, setCameraType] = useState('back'); // Camera type (front or back)
   const [flashMode, setFlashMode] = useState('off'); // Flash mode (on or off)
-  const cameraRef = useRef(null);
+  const cameraRef = useRef(null); // Camera reference
 
-  // Handle permissions not granted
+  // Handle permissions not loaded yet
   if (!permission) {
     // Camera permissions are still loading
     return (
@@ -21,6 +22,7 @@ export default function CameraScreen() {
     );
   }
 
+  // Handle permissions not granted
   if (!permission.granted) {
     // Camera permissions are not granted yet
     return (
@@ -68,45 +70,19 @@ export default function CameraScreen() {
 
   return (
     <View style={styles.container}>
-      {!image ?  // If there is no image, show the camera and the buttons
-        <CameraView
-          style={styles.camera}
-          ref={cameraRef}
-          facing={cameraType} 
-          flash={flashMode} 
-        >
-          <View style={styles.buttonsContainer}>
-            <View style={styles.cameraButtonContainer}>
-              <Button title="Take a picture" icon="camera" onPress={takePicture} />
-            </View>
-            <View style={styles.flashButtonContainer}>
-              <Button
-                title={flashMode === 'off' ? 'Flash Off' : 'Flash On'}
-                icon="flash"
-                onPress={toggleFlashMode}
-                color={flashMode === 'off' ? 'red' : 'white'}
-              />
-            </View>
-            <View style={styles.rotateButtonContainer}>
-              <Button
-                title={cameraType === 'back' ? 'Front Camera' : 'Back Camera'}
-                icon="cycle"
-                onPress={toggleCameraType}
-              />
-            </View>
-          </View>
-        </CameraView>
-       : // If there is an image, show the image with the retake and save buttons
-        <ImageBackground source={{ uri: image }} style={styles.camera}>
-          <View style={styles.buttonsContainer}>
-            <View style={styles.retakeButtonContainer}>
-              <Button title="Re-take" icon="retweet" onPress={() => setImage(null)} />
-            </View>
-            <View style={styles.saveButtonContainer}>
-              <Button title="Save" icon="check" onPress={savePicture} />
-            </View>
-          </View>
-        </ImageBackground>
+      {!image ?  // If there is no image, show the camera component
+        <Camera 
+          cameraRef={cameraRef} 
+          cameraType={cameraType} 
+          flashMode={flashMode} 
+          takePicture={takePicture} 
+          toggleCameraType={toggleCameraType} 
+          toggleFlashMode={toggleFlashMode}/>
+       : // If there is an image, show the image preview component
+        <ImagePreview 
+          image={image} 
+          setImage={setImage} 
+          savePicture={savePicture}/>
       }
     </View>
   );
@@ -118,39 +94,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  camera: {
-    flex: 1,
-    width: '100%',
-    aspectRatio: 11 / 16,
-  },
-  buttonsContainer: {
-    flex: 1,
-    backgroundColor: 'transparent',
-    width: '100%',
-  },
-  cameraButtonContainer: {
-    position: 'absolute',
-    bottom: 20,
-    alignSelf: 'center',
-  },
-  flashButtonContainer: {
-    position: 'absolute',
-    left: 100,
-    top: 40,
-  },
-  rotateButtonContainer: {
-    position: 'absolute',
-    right: 120,
-    top: 40,
-  },
-  retakeButtonContainer: {
-    position: 'absolute',
-    bottom: 20,
-    left: 120,
-  },
-  saveButtonContainer: {
-    position: 'absolute',
-    bottom: 20,
-    right: 120,
+  message: {
+    marginBottom: 20,
   },
 });
