@@ -36,6 +36,14 @@ const styles = StyleSheet.create({
       bottom: 20,
       right: 120,
     },
+    uploading: {
+      position: 'absolute',
+      alignSelf: 'center',
+      bottom: 100,
+      color: 'white',
+      fontWeight: 'bold',
+      fontSize: 20,
+    },
   });
   
 export default styles;

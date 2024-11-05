@@ -4,6 +4,7 @@ import { useCameraPermissions } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import ImagePreview from '../components/ImagePreview';
 import Camera from '../components/Camera';
+import { saveImageToFirestore } from '../firebase/Config'
 
 export default function CameraScreen() {
   const [permission, requestPermission] = useCameraPermissions(); // New hook from expo-camera. It returns the permission status and a function to request the permission
@@ -11,6 +12,7 @@ export default function CameraScreen() {
   const [cameraType, setCameraType] = useState('back'); // Camera type (front or back)
   const [flashMode, setFlashMode] = useState('off'); // Flash mode (on or off)
   const cameraRef = useRef(null); // Camera reference
+  const [uploading, setUploading] = useState(false); // Uploading state
 
   // Handle permissions not loaded yet
   if (!permission) {
@@ -57,13 +59,17 @@ export default function CameraScreen() {
 
   // Save the picture in the library
   const savePicture = async () => {
+    setUploading(true);
     if (image) {
       try {
         await MediaLibrary.saveToLibraryAsync(image);
+        const url = await saveImageToFirestore(image);
+        console.log('Image saved to library and uploaded to Cloud Storage with URL: ', url)
       } catch (error) {
         console.log('Error saving picture: ', error);
       } finally {
         setImage(null);
+        setUploading(false);
       }
     }
   };
@@ -82,7 +88,8 @@ export default function CameraScreen() {
         <ImagePreview 
           image={image} 
           setImage={setImage} 
-          savePicture={savePicture}/>
+          savePicture={savePicture}
+          uploading={uploading}/>
       }
     </View>
   );
