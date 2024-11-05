@@ -20,14 +20,10 @@ const firebaseConfig = {
 
   const cameraCollection = "cameraCollection";
 
-  async function base64ToBlob(base64, contentType) {
-    const response = await fetch(`data:${contentType};base64,${base64}`);
-    const blob = await response.blob();
-    return blob;
-}
-
-const uploadImage = async (imageUri) => {
+  // Upload image to Firebase Storage
+  const uploadImage = async (imageUri) => {
     try {
+        // Get the image from the file system
         const blob = await new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
             xhr.onload = () => {
@@ -42,14 +38,13 @@ const uploadImage = async (imageUri) => {
             xhr.send(null);
         });
 
-        /*const fileName = imageUri.substring(imageUri.lastIndexOf('/') + 1);
-        const ref = ref(storage, fileName);
-        const snapshot = await ref.put(blob);*/
-
+        // Create a reference to the location where the image will be saved
         const storageRef = ref(storage, 'images/' + new Date().toISOString());
 
+        // Upload the image to the location
         const snapshot = await uploadBytesResumable(storageRef, blob);
 
+        // Get the download URL
         const url = await getDownloadURL(snapshot.ref);
 
         console.log('Uploaded image with URL : ', url);
@@ -58,9 +53,10 @@ const uploadImage = async (imageUri) => {
     } catch (error) {
         console.error('Error uploading image:', error);
     }
-};
-
-const saveImageToFirestore = async (imageUri) => {
+  };
+  
+  // Save image to Firestore database
+  const saveImageToFirestore = async (imageUri) => {
     try {
         const url = await uploadImage(imageUri);
         const docRef = await addDoc(collection(db, cameraCollection), {
@@ -73,9 +69,10 @@ const saveImageToFirestore = async (imageUri) => {
         console.error('Error adding image:', error);
     }
 
-};
+  };
 
-const retrieveAllImages = async () => {
+  // Retrieve all images from Firestore database as an array of objects
+  const retrieveAllImages = async () => {
     try {
         const images = [];
         const querySnapshot = await getDocs(collection(db, cameraCollection));
@@ -93,7 +90,7 @@ const retrieveAllImages = async () => {
         console.error('Error retrieving images:', error);
         return [];
     }
-};
+  };
 
   export {
     db,
