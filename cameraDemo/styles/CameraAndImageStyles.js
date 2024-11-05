@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
       width: '100%',
       aspectRatio: 11 / 16,
     },
+    
     buttonsContainer: {
       flex: 1,
       backgroundColor: 'transparent',
@@ -30,6 +31,15 @@ const styles = StyleSheet.create({
       position: 'absolute',
       bottom: 20,
       left: 120,
+    },
+    clearButtonContainer: {
+      position: 'absolute',
+      bottom: 20,
+      right: 235,
+    },
+    DrawLineContainer: {
+      height: '100%' ,
+      width: '100%',
     },
     saveButtonContainer: {
       position: 'absolute',
