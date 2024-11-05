@@ -3,7 +3,7 @@ import { getFirestore, collection, addDoc, query, onSnapshot, deleteDoc, doc, ge
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import * as FileSystem from 'expo-file-system';
 
-const firebaseConfig = {
+/*const firebaseConfig = {
     apiKey: "AIzaSyCbKVGaYFzPdY6KmHqbYGU29AzJwKnYjMk",
     authDomain: "picturedemo-d7f68.firebaseapp.com",
     projectId: "picturedemo-d7f68",
@@ -11,7 +11,17 @@ const firebaseConfig = {
     messagingSenderId: "163019016066",
     appId: "1:163019016066:web:1f2c0479c1246629a6319b",
     measurementId: "G-BTZBF4SF7B"
-  };
+  };*/
+
+  const firebaseConfig = {
+    apiKey: process.env.EXPO_PUBLIC_API_KEY,
+    authDomain: process.env.EXPO_PUBLIC_AUTH_DOMAIN,
+    projectId: process.env.EXPO_PUBLIC_PROJECT_ID,
+    storageBucket: process.env.EXPO_PUBLIC_STORAGE_BUCKET,
+    messagingSenderId: process.env.EXPO_PUBLIC_MESSAGING_SENDER_ID,
+    appId: process.env.EXPO_PUBLIC_APP_ID,
+    measurementId: process.env.EXPO_PUBLIC_MEASUREMENT_ID
+}
 
   const app = initializeApp(firebaseConfig);
 
