@@ -56,10 +56,10 @@ export default function CameraScreen() {
   };
 
   // Save the picture in the library
-  const savePicture = async () => {
-    if (image) {
+  const savePicture = async (capturedImageUri) => {
+    if (capturedImageUri) {
       try {
-        await MediaLibrary.saveToLibraryAsync(image);
+        await MediaLibrary.saveToLibraryAsync(capturedImageUri);
       } catch (error) {
         console.log('Error saving picture: ', error);
       } finally {

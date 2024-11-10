@@ -5,8 +5,6 @@ import styles from "../styles/CameraAndImageStyles"
 import Button from './Button'
 
 
-
-
 export default function DrawLine() {
     const [paths, setPaths] = useState([])
     const [currentPath, setCurrentPath] = useState([])
@@ -34,6 +32,7 @@ export default function DrawLine() {
         setPaths([])
         setCurrentPath([])
     }
+
 
     return (
         <View
@@ -64,9 +63,11 @@ export default function DrawLine() {
                     strokeLinecap={'round'}
                 />
             </Svg>
+            
             <View style={styles.clearButtonContainer}>
                 <Button title="Clear" icon="trash" onPress={handleClearButtonClick} onLongPress={handleClearButtonLongClick} />
             </View>
+            
         </View>
 
     )

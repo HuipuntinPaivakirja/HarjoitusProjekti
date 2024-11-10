@@ -30,12 +30,12 @@ const styles = StyleSheet.create({
     retakeButtonContainer: {
       position: 'absolute',
       bottom: 20,
-      left: 120,
+      left: 40,
     },
     clearButtonContainer: {
       position: 'absolute',
       bottom: 20,
-      right: 235,
+      right: 145,
     },
     DrawLineContainer: {
       height: '100%' ,
@@ -44,7 +44,13 @@ const styles = StyleSheet.create({
     saveButtonContainer: {
       position: 'absolute',
       bottom: 20,
-      right: 120,
+      right: 40,
+    },
+    SnappiContainer: {
+      backgroundColor: "blue",
+      height: '100%',
+      width: '100%',
+      
     },
   });
   
